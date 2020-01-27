@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'SearchRecipe.apps.SearchrecipeConfig',
+    'SearchRecipe',
 ]
 
 MIDDLEWARE = [
@@ -77,10 +77,13 @@ WSGI_APPLICATION = 'cw3site.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': None,
     }
 }
+from mongoengine import connect
+connect('newDB', host='ec2-35-177-20-229.eu-west-2.compute.amazonaws.com', port=27017)
 
 
 # Password validation
