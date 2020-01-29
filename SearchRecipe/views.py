@@ -27,7 +27,8 @@ def search(request):
         question_list = TestModel.objects.filter(title=q)
     else:
         question_list = TestModel.objects.all()
-    paginator = Paginator(question_list, 2)
+        question_list = question_list[:100]
+    paginator = Paginator(question_list, 5)
     context = {
         'page': paginator.page(request.GET.get('page', 1)),
         'paginator': paginator,
