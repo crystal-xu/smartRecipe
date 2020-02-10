@@ -4,6 +4,16 @@ from django.shortcuts import HttpResponse, render
 
 # Create your views here.
 from SearchRecipe.models import TestModel
+from SearchRecipe.search import do_search
+import os
+from SearchRecipe.search import load_index
+from django.conf import settings
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cw3site.settings')
+index_path = os.path.join(settings.STATICFILES_DIRS[0], "index.txt")
+
+
+print("load index")
+index, doc_all_ids_set = load_index(index_path)
 
 
 def add(request):
@@ -22,16 +32,27 @@ def query(request):
 
 
 def search(request):
+
     q = request.GET.get('q')
     if q:
-        question_list = TestModel.objects.filter(title=q)
+        # question_list = TestModel.objects.filter(title=q)
+        print("start search")
+        question_list = do_search(q, index, doc_all_ids_set)
+        print(question_list)
     else:
         question_list = TestModel.objects.all()
+        print(question_list)
         question_list = question_list[:100]
-    paginator = Paginator(question_list, 5)
+
+    paginator = Paginator(question_list, 6)
     context = {
         'page': paginator.page(request.GET.get('page', 1)),
         'paginator': paginator,
-        'query': query
+        'query': q
     }
     return render(request, 'index.html', context)
+
+
+def load_welcome(request):
+    # TODO: get welcome page and load index
+    return HttpResponse("Welcome page!")
