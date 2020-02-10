@@ -21,5 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('add/', views.add),
     path('query/', views.query),
-    path('search/', views.search)
+    path('search/', views.search),
+    # TODO: welcome page and load index
+    path('', views.load_welcome)
 ]
