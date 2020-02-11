@@ -4,9 +4,9 @@
 # @File    : search_model.py
 
 from SearchRecipe.data_preprocess import *
+from collections import OrderedDict
 import numpy as np
 from SearchRecipe.models import TestModel
-from array import *
 
 
 def load_index(path):
@@ -15,7 +15,7 @@ def load_index(path):
     load the index file in the disk into the dict data structure:
 
     :param path:  the path of index file
-    :return:  index: data structure {term: (doc_id: (positions))}
+    :return:  index: data structure {term: OrderedDict{doc_id: [positions]}}
               doc_all_ids_set: all document ids set (using for NOT and computing df)
     """
     index = dict()
@@ -32,9 +32,10 @@ def load_index(path):
                 doc_all_ids_set.add(doc_id)
                 position_list = doc_position[1].strip().split(',')
                 if term not in index:  # initialization
-                    index[term] = list()
-                index[term].append((doc_id, tuple(position_list)))
-
+                    index[term] = OrderedDict()
+                if doc_id not in index[term]:
+                    index[term][doc_id] = list()
+                index[term][doc_id].extend(position_list)  # get position list
     return index, doc_all_ids_set
 
 
@@ -55,23 +56,23 @@ def find_document_for_single_term(index, term):
     if term not in index:
         doc_ids_set = set()
     else:
-        doc_ids_set = set([doc[0] for doc in index[term]])
+        doc_ids_set = set(index[term].keys())
     return doc_ids_set
 
 
 def find_document_with_positions(index, term):
     """
-    get the doc ids and positions list
+    get the doc ids and positions dict
 
     :param index: the index dict
     :param term: the single term
-    :return: [(doc_id,(position))]
+    :return: {doc_id:[position]}
     """
     if term not in index:
-        doc_ids_list = list()
+        doc_ids_dict = dict()
     else:
-        doc_ids_list = index[term]
-    return doc_ids_list
+        doc_ids_dict = index[term]
+    return doc_ids_dict
 
 
 def proximity_search(index, proximity_query, distance, phrase_flag=0):
@@ -91,7 +92,7 @@ def proximity_search(index, proximity_query, distance, phrase_flag=0):
     assert len(term_1) == 1 and len(term_2) == 1
     doc_ids_dict_1 = find_document_with_positions(index, term_1[0])
     doc_ids_dict_2 = find_document_with_positions(index, term_2[0])
-    if len(doc_ids_dict_1) == 0 or len(doc_ids_dict_2) == 0:  # deal with the term in query but not in doc
+    if len(doc_ids_dict_1) == 0 or len(doc_ids_dict_2) == 0:   # deal with the term in query but not in doc
         return doc_ids_set
 
     common_set = set(doc_ids_dict_1.keys()).intersection(set(doc_ids_dict_2.keys()))  # focus on the intersection
@@ -105,7 +106,7 @@ def proximity_search(index, proximity_query, distance, phrase_flag=0):
         range_2 = len(positions_2) - 1
         j = 0
         while 1:
-            if phrase_flag == 0:  # normal proximity search
+            if phrase_flag == 0:   # normal proximity search
                 if abs(positions_1[i] - positions_2[j]) <= distance:
                     doc_ids_set.add(doc_id)
                     break
@@ -116,7 +117,7 @@ def proximity_search(index, proximity_query, distance, phrase_flag=0):
                         j = j + 1
                     else:
                         break
-            else:  # phrase search
+            else:    # phrase search
                 if positions_2[j] - positions_1[i] == distance:  # notice here (pos2 - pos1 == 1) will break
                     doc_ids_set.add(doc_id)
                     break
@@ -236,22 +237,22 @@ def ranked_search(index, query_content, doc_all_ids_set):
     print("rank search")
     n = len(doc_all_ids_set)  # number of documents in a collection
     print(n)
-    scores_dict = {}  # {doc_id: score}
+    scores_dict = {}   # {doc_id: score}
     terms = stemming(stopping(tokenisation(case_folding(query_content))))  # preprocessing
     print(terms)
     for term in terms:
         print(term)
-        doc_ids_list = find_document_with_positions(index, term)
-        df = len(doc_ids_list)
+        doc_ids_dict = find_document_with_positions(index, term)
+        df = len(doc_ids_dict)
         if df == 0:
             continue
         else:
-            for doc in doc_ids_list:
-                tf = len(doc[1])
-                if doc[0] not in scores_dict:
-                    scores_dict[doc[0]] = (1.0 + np.log10(tf)) * (np.log10(n / float(df)))
+            for doc_id in doc_ids_dict:
+                tf = len(doc_ids_dict[doc_id])
+                if doc_id not in scores_dict:
+                    scores_dict[doc_id] = (1.0 + np.log10(tf)) * (np.log10(n/float(df)))
                 else:
-                    scores_dict[doc[0]] += (1.0 + np.log10(tf)) * (np.log10(n / float(df)))
+                    scores_dict[doc_id] += (1.0 + np.log10(tf)) * (np.log10(n/float(df)))
         print("one step")
     print("finished search")
     scores_list = sorted(scores_dict.items(), key=lambda x: x[1], reverse=True)  # reverse list
@@ -298,8 +299,9 @@ def do_search(query, index, doc_all_ids_set):
     # index, doc_all_ids_set = load_index(index_path)
     print("enter do search")
     results_list = ranked_search(index, query, doc_all_ids_set)
+    results = list()
 
-    # todo: merge the boolean search
+    #todo: merge the boolean search
 
     # one by one
     # for doc_score in results_list:
@@ -321,3 +323,4 @@ def do_search(query, index, doc_all_ids_set):
     # for i in range(len(results)):
     #     print(results[i]['title'])
     return results
+
