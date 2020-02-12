@@ -10,6 +10,8 @@ class TestModel(mongoengine.Document):
     title = mongoengine.StringField(
         max_length=300,
     )
+    idx = mongoengine.StringField(
+    )
     docId = mongoengine.StringField(
     )
     text = mongoengine.StringField(
@@ -20,4 +22,4 @@ class TestModel(mongoengine.Document):
     create_time = mongoengine.DateTimeField(
         default=datetime.datetime.now
     )
-    meta = {'collection': 'recipe'}
+    meta = {'collection': 'recipe', 'strict': False}
