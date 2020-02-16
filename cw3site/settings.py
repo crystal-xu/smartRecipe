@@ -83,7 +83,7 @@ DATABASES = {
     }
 }
 from mongoengine import connect
-connect('newDB', host='ec2-35-177-20-229.eu-west-2.compute.amazonaws.com', port=27017)
+connect('newDB1', host='ec2-35-177-20-229.eu-west-2.compute.amazonaws.com', port=27017)
 
 
 # Password validation

@@ -3,52 +3,64 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+{#        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">#}
         <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{#        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+        {% load static %}
+        <link rel="stylesheet" href="{% static "/bootstrap.min.css" %}">
+        <script src="{% static "/bootstrap.min.js" %}"></script>
+
+
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+        <style>
+
+            a:link { color: #778899;}
+            a:visited { color: #ce8483;}
+            a:active { color: #337ab7;}
+            a:hover { color: #67b168;}
+            .highLight{
+                color: red;
+            }
+        </style>
+
 	</head>
-	<body style="height: 100%; width: 100%;background-size: 100% 100%;background-color: floralwhite;">
+	<body style="height: 100%; width: 100%;background-size: 100% 100%;overflow-x: hidden;overflow-y: hidden">
 		<div id= "main_framework" style=" margin: auto; width: 95%; height: 100%;top: 20px;">
 			<div id="search_framework" style=" margin: auto;width: 90%; height: 18%;">
                 {% load static %}
-			  <img src="{% static "/new_logo_search.jpg" %}" style="width: 220px;height: 80px;position: absolute;left: 50px;" />
+			  <img src="{% static "/smartrecipe.png" %}" style="width: 220px;height: 80px;position: absolute;left: 50px;" />
 
                 <!-- 提交数据给金航 -->
-                <form method='get' action="" target="_blank">
-			    <input type="text" class="form-control" placeholder="please enter recipe here" style="text-transform: lowercase;position: absolute; top: 30px;width: 50%;left: 300px;" name="q">
+                <form method='get' action="" >
+			    <input type="text" class="form-control" style="text-transform: lowercase;position: absolute; top: 30px;width: 50%;left: 300px;" name="q" id="input" value="{{ query }}">
 				<div style="position: absolute; left: 73%;top: 30px;">
-				<button type="submit" class="btn btn-info" >Search</button>
+				<button type="submit" class="btn btn-info" id="{{ page.object_list|length }}" >Search</button>
                     </div>
                 </form>
-
 			</div>
-        </div>
-        <div id="content_framework" style=" position:absolute;top: 100px;left:70px;width: 90%; height: 79%;">
-            <table   style="width: 100%; height: 100%;" border="2px" >
+        <div id="content_framework" style=" position:absolute;top: 10%;left:7.5%;width: 85%; height: 79%;">
+            <table   style="width: 100%; height: 100%;"  >
                 <tbody>
-                <!--
-                    作者：YingZhang9579@icloud.com
-                    时间：2020-02-08
-                    描述：试着和金航交互
-                -->
                 {% for result in page.object_list %}
                 <tr>
                     <td style="vertical-align:text-top;">
-                        <a data-toggle="modal" data-target="#myModal">{{result.title}}</a><br />
-                        <a href="{{result.link}}">link</a>
-                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true";>
+                        <a href="{{result.link}}" >{{ result.link|truncatechars:27 }}</a><br />
+                        <a data-toggle="modal" data-target="#myModal-{{ forloop.counter0 }}"    id="{{ forloop.counter0 }}" onclick="process_text(id);" style="font-size:20px;">{{result.title}}</a><br />
+                        <p id="abstract-{{ forloop.counter0 }}">{{ result.text|truncatechars:280 }}</p>
+
+                        <div class="modal fade" id="myModal-{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-{{ forloop.counter0 }}" aria-hidden="true";>
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                     </button>
-                                    <h4 class="modal-title" id="myModalLabel">
-                                        detailed inforamtion
+                                    <h4 class="modal-title" id="myModalLabel-{{ forloop.counter0 }}" >
+                                        <strong>Detailed Information</strong>
                                     </h4>
                                 </div>
                                 <div class="modal-body">
-                                    <p>{{result.text}}</p>
+                                    <p id="text-{{ forloop.counter0 }}" >{{result.text}}</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">close
@@ -59,23 +71,99 @@
                     </div>
                     </td>
                 </tr>
+                {% empty %}
+                <p>Sorry, we do not have this recipe in our database!!!</p>
                 {% endfor %}
 					</tbody>
 				</table>
 		</div>
 
-     <div style="position: absolute;top: 600px;left: 500px">
-    {% if page.has_previous or page.has_next %}
-    <div>
-        {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo;
-        上一页{% if page.has_previous %}</a>{% endif %}
-        |
-        {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}下一页 &raquo;
-        {% if page.has_next %}</a>{% endif %}
-    </div>
-{% endif %}
-     </div>
+     <div style="position: absolute;top: 90%;left: 36%">
+{#     {% load static %}#}
+{#			  <img src="{% static "/footer_pic.jpg" %}" style="width: 100px;height: 50px;position: relative;left: 50px;" />#}
+         <div id="pages" class="text-center" >
+        <nav>
+            <ul class="pagination">
+                <li class="step-links">
+                {% if page.has_previous %}
+                    {% if query %}
+                    <a class='active' href="?q={{ query }}&amp;page={{ page.previous_page_number }}" style="width: 100px;">Previous</a>
+                    {% else %}
+                    <a class='active' href="?page={{ page.previous_page_number }}" style="width: 100px;">Previous</a>
+                    {% endif %}
+                {% endif %}
 
+                <span class="current">
+                     {{ page.number }} / {{ page.paginator.num_pages }}</span>
+
+{#                    超过十页就显示。。。这个还没有完成 别忘了#}
+{#                {% for i in paginator.page_range %}#}
+{#                    {% if query %}#}
+{#                    <a class="current" href="?q={{ query }}&amp;page={{ i }}">{{ i }}</a>#}
+{#                    {% else %}#}
+{#                    <a class="current" href="?page={{ i }}">{{ i }}</a>#}
+{#                    {% endif %}#}
+{#                    {% endfor %}#}
+
+                {% if page.has_next %}
+                    {% if query %}
+                    <a class='active' href="?q={{ query }}&amp;page={{ page.next_page_number }}" style="width: 100px;">Next</a>
+                        {% else %}
+                        <a class='active' href="?page={{ page.next_page_number }}" style="width: 100px;">Next</a>
+                        {% endif %}
+                {% endif %}
+                </li></ul></nav></div>
+     </div>
         </div>
+
+    <script>
+        value = document.getElementById("input").getAttribute("value");
+        if ( value === "None"){
+              input_value = "please enter a recipe";
+              document.getElementById("input").setAttribute("placeholder", input_value);
+              document.getElementById("input").removeAttribute("value");
+          }
+
+      function process_text(id) {
+          let title = document.getElementById(id).innerText;
+          let text_string = document.getElementById("text-" + id).innerText;
+          let data = text_string.split("Ingredients:");
+          text_string = data[1].trim();
+          data = text_string.split("Instructions:");
+          let Ingredients = data[0].trim();
+          let Instructions = data[1].trim();
+
+          Ingredients = Ingredients.split('\n');
+          let order = "";
+          for(i in Ingredients){
+              temp_1 = "<li>"+Ingredients[i]+"</li>";
+              order = order + temp_1;
+          }
+          let ins = "";
+          Instructions = Instructions.split('\n');
+          for(i in Instructions){
+              temp_2 = "<li>"+Instructions[i]+"</li>";
+              ins = ins + temp_2;
+          }
+          document.getElementById("text-" + id).innerHTML = "<strong>"+"Ingredient:"+"</strong>"+"<ul>"+order+"</ul>"+"<p></p>"+"<strong>"+"Instructions:"+"</strong>"+"<ol>"+ins+"</ol>";
+          document.getElementById("myModalLabel-"+id).innerHTML = title;
+      }
+
+
+        let times = document.getElementsByTagName("button")[0].id;
+
+		let pattern = document.getElementById("input").value;
+
+		let re = new RegExp(pattern,"g");
+
+        for(let i=0;i<times;i++){
+            let searching = document.getElementById(i).innerHTML;
+
+            let search_result = searching.replace(re,"<span class='highLight'>$&</span>");
+            document.getElementById(i).innerHTML = search_result;
+	        }
+
+
+    </script>
 	</body>
 </html>

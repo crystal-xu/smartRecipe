@@ -31,7 +31,7 @@ index = dict()  # {term: OrderedDict{doc_id: [positions]}}
 
 stdout.write("\t Preprocess document           1")
 for doc_id in range(100000):  # len(doc_list)
-    object_id = doc_list[doc_id]['docId']
+    object_id = doc_list[doc_id]['idx']
     doc_title = doc_list[doc_id]['title']
     doc_text = doc_list[doc_id]['text']
     doc_content = doc_title + doc_text
@@ -41,7 +41,6 @@ for doc_id in range(100000):  # len(doc_list)
         position += 1
         if term not in index:  # initialization
             index[term] = OrderedDict()
-
         if object_id not in index[term]:
             index[term][object_id] = list()
         index[term][object_id].append(position)  # append position

@@ -24,12 +24,13 @@ def case_folding(text):
 
 def tokenisation(text):
     """
-    get tokens from text, just split on every non-letter and non-digit character
+    get tokens from text, just split on every non-letter character
 
     :param text: can be document or queries in ranked query
     :return: get tokens
     """
-    text = re.sub('[^\w\d]', ' ', text)
+    # text = re.sub('[^\w\d]', ' ', text)
+    text = re.sub('[^a-zA-Z]', ' ', text)
     text = text.split()
     return text
 
@@ -41,7 +42,6 @@ def stopping(tokens):
     :param tokens: the tokens got from tokenisation function
     :return: tokens without stop words
     """
-    print(stop_path)
     stopwords = set()
     with open(stop_path) as f:
         for line in f:
