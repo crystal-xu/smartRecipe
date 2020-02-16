@@ -392,6 +392,7 @@ def do_search(index, query, doc_all_ids_set):
             num += 1
             if num == max_num:
                 break
+        print("idx found")
         results = TestModel.objects.filter(idx__in=object_list)
         results = list(results)
         results.sort(key=lambda t: object_list.index(t.idx))
