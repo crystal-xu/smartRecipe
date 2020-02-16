@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height: 110%;width: 100%;">
+<html style="height: 100%;width: 100%;">
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
@@ -13,7 +13,7 @@
 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-        <style>
+        <style type="text/css">
 
             a:link { color: #778899;}
             a:visited { color: #ce8483;}
@@ -25,28 +25,26 @@
         </style>
 
 	</head>
-	<body style="height: 100%; width: 100%;background-size: 100% 100%;overflow-x: hidden;overflow-y: hidden">
-		<div id= "main_framework" style=" margin: auto; width: 95%; height: 100%;top: 20px;">
+	<body style="height: 100%; width: 100%;background-size: 100% 100%;overflow-x: hidden;">
+		<div id= "main_framework" style="width: 95%; height: 100%;position: absolute;top: 2%;left: 2.5%">
 			<div id="search_framework" style=" margin: auto;width: 90%; height: 18%;">
                 {% load static %}
-			  <img src="{% static "/smartrecipe.png" %}" style="width: 220px;height: 80px;position: absolute;left: 50px;" />
-
-                <!-- 提交数据给金航 -->
+			  <img src="{% static "/smartrecipe.png" %}" style="width: 18%;height: 13%;position: absolute;left: 5%;" />
                 <form method='get' action="" >
-			    <input type="text" class="form-control" style="text-transform: lowercase;position: absolute; top: 30px;width: 50%;left: 300px;" name="q" id="input" value="{{ query }}">
-				<div style="position: absolute; left: 73%;top: 30px;">
+			    <input type="text" class="form-control" style="position: absolute; top: 4.4%;width: 50%;left: 23%;" name="q" id="input" value="{{ query }}">
+				<div style="position: absolute; left: 73%;top: 4.4%;">
 				<button type="submit" class="btn btn-info" id="{{ page.object_list|length }}" >Search</button>
                     </div>
                 </form>
 			</div>
-        <div id="content_framework" style=" position:absolute;top: 10%;left:7.5%;width: 85%; height: 79%;">
+        <div id="content_framework" style=" position:absolute;top: 12%;left:7.5%;width: 85%; height: 79%;">
             <table   style="width: 100%; height: 100%;"  >
                 <tbody>
                 {% for result in page.object_list %}
                 <tr>
                     <td style="vertical-align:text-top;">
                         <a href="{{result.link}}" >{{ result.link|truncatechars:27 }}</a><br />
-                        <a data-toggle="modal" data-target="#myModal-{{ forloop.counter0 }}"    id="{{ forloop.counter0 }}" onclick="process_text(id);" style="font-size:20px;">{{result.title}}</a><br />
+                        <a data-toggle="modal" data-target="#myModal-{{ forloop.counter0 }}"    id="{{ forloop.counter0 }}" onclick="process_text(id);" style="font-size:20px;color: #1C1BA8;">{{result.title}}</a><br />
                         <p id="abstract-{{ forloop.counter0 }}">{{ result.text|truncatechars:280 }}</p>
 
                         <div class="modal fade" id="myModal-{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-{{ forloop.counter0 }}" aria-hidden="true";>
@@ -77,10 +75,9 @@
 					</tbody>
 				</table>
 		</div>
+        </div>
 
-     <div style="position: absolute;top: 90%;left: 36%">
-{#     {% load static %}#}
-{#			  <img src="{% static "/footer_pic.jpg" %}" style="width: 100px;height: 50px;position: relative;left: 50px;" />#}
+     <div style="position: absolute;top: 90%;left: 39%;width: 22%">
          <div id="pages" class="text-center" >
         <nav>
             <ul class="pagination">
@@ -96,9 +93,33 @@
                 <span class="current">
                      {{ page.number }} / {{ page.paginator.num_pages }}</span>
 
-{#                    超过十页就显示。。。这个还没有完成 别忘了#}
-{#                {% for i in paginator.page_range %}#}
+                   {# 超过十页就显示。。。这个还没有完成 别忘了#}
+{#                {% for one_page in page.paginator.page_range %}#}
 {#                    {% if query %}#}
+{#                        {% if one_page %}#}
+{#                            {% ifequal one_page page.number  %}#}
+{#                                <a class="page active" >{{ one_page }}</a>#}
+{#                            {% else %}#}
+{#                                <a class="current" href="?page={{ one_page }}">{{ one_page }}</a>#}
+{#                            {% endifequal %}#}
+{#                        {% else %}#}
+{#                                <a class="current" href="">...</a>#}
+{#                            {% endif %}#}
+{#                    {% else %}#}
+{#                            {% if one_page %}#}
+{#                                {% ifequal one_page page.number  %}#}
+{#                                <a class="active" href="?q={{ query }}&amp;page={{ one_page }}">{{ one_page }}</a>#}
+{#                                {% else %}#}
+{#                                    <a class="current" href="?page={{ one_page }}">{{ one_page }}</a>#}
+{#                                {% endifequal %}#}
+{#                            {% else %}#}
+{#                                <a class="current" href="">...</a>#}
+{#                            {% endif %}#}
+{#                        {% endif %}#}
+{#                {% endfor %}#}
+
+
+
 {#                    <a class="current" href="?q={{ query }}&amp;page={{ i }}">{{ i }}</a>#}
 {#                    {% else %}#}
 {#                    <a class="current" href="?page={{ i }}">{{ i }}</a>#}
@@ -162,7 +183,6 @@
             let search_result = searching.replace(re,"<span class='highLight'>$&</span>");
             document.getElementById(i).innerHTML = search_result;
 	        }
-
 
     </script>
 	</body>
