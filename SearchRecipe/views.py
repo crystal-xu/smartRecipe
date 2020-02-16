@@ -37,14 +37,14 @@ def search(request):
     if q:
         # question_list = TestModel.objects.filter(title=q)
         print("start search")
-        question_list = do_search(q, index, doc_all_ids_set)
+        question_list = do_search(index, q, doc_all_ids_set)
         print(question_list)
     else:
         question_list = TestModel.objects.all()
         print(question_list)
         question_list = question_list[:100]
 
-    paginator = Paginator(question_list, 6)
+    paginator = Paginator(question_list, 5)
     context = {
         'page': paginator.page(request.GET.get('page', 1)),
         'paginator': paginator,
@@ -54,5 +54,6 @@ def search(request):
 
 
 def load_welcome(request):
-    # TODO: get welcome page and load index
-    return HttpResponse("Welcome page!")
+    q = request.GET.get('q')
+    
+    return render(request, 'main_page.html')
