@@ -1,6 +1,6 @@
 from bson import json_util
 from django.core.paginator import Paginator
-from django.shortcuts import HttpResponse, render
+from django.shortcuts import HttpResponse, render, redirect
 
 # Create your views here.
 from SearchRecipe.models import TestModel
@@ -14,6 +14,8 @@ index_path = os.path.join(settings.STATICFILES_DIRS[0], "index.txt")
 
 print("load index")
 index, doc_all_ids_set = load_index(index_path)
+
+querynew = ''
 
 
 def add(request):
@@ -32,8 +34,12 @@ def query(request):
 
 
 def search(request):
-
-    q = request.GET.get('q')
+    global querynew
+    if querynew != '':
+        q = querynew
+    else:
+        q = request.GET.get('q')
+    querynew = ''
     if q:
         # question_list = TestModel.objects.filter(title=q)
         print("start search")
@@ -54,6 +60,12 @@ def search(request):
 
 
 def load_welcome(request):
+
     q = request.GET.get('q')
-    
-    return render(request, 'main_page.html')
+    global querynew
+    if (q != None) and (q != ''):
+        querynew = q
+        return redirect('search')
+    else:
+        return render(request, 'main_page.html')
+    # return render(request, 'main_page.html')
