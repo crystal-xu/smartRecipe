@@ -23,24 +23,25 @@ django.setup()
 stdout.write("Start build index\n")
 t_start = time.time()
 
-doc_list = TestModel.objects.all()
+#doc_list = TestModel.objects.all()
 t0 = time.time()
 stdout.write("Get mongo objects all used %.02f seconds\n" % (t0 - t_start))
 
 index = dict()  # {term: OrderedDict{doc_id: [positions]}}
 
 stdout.write("\t Preprocess document           1")
-for doc_id in range(100000):  # len(doc_list)
-    object_id = doc_list[doc_id]['idx']
-    doc_title = doc_list[doc_id]['title']
-    doc_text = doc_list[doc_id]['text']
+doc_id = 0
+for doc in TestModel.objects.all():  # len(doc_list)
+    object_id = doc['idx']
+    doc_title = doc['title']
+    doc_text = doc['text']
     doc_content = doc_title + doc_text
     terms = stemming(stopping(tokenisation(case_folding(doc_content))))
     position = 0
     for term in terms:  # process every term occur in one doc
         position += 1
         if term not in index:  # initialization
-            index[term] = OrderedDict()
+            index[term] = dict()
         if object_id not in index[term]:
             index[term][object_id] = list()
         index[term][object_id].append(position)  # append position
@@ -48,6 +49,7 @@ for doc_id in range(100000):  # len(doc_list)
     stdout.write("\b" * len(str(doc_id)))
     stdout.write("{0}".format(doc_id))
     stdout.flush()
+    doc_id += 1
 
 t1 = time.time()
 stdout.write("Finish build index in %.02f seconds" % (t1 - t0))
