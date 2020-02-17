@@ -2,6 +2,8 @@
 <html style="height: 100%;width: 100%;">
 	<head>
 		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
 		<title></title>
 {#        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">#}
         <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
@@ -25,7 +27,7 @@
         </style>
 
 	</head>
-	<body style="height: 100%; width: 100%;background-size: 100% 100%;overflow-x: hidden;">
+	<body style="height: 100%; width: 100%;background-size: 100% 100%;">
 		<div id= "main_framework" style="width: 95%; height: 100%;position: absolute;top: 2%;left: 2.5%">
 			<div id="search_framework" style=" margin: auto;width: 90%; height: 18%;">
                 {% load static %}
@@ -77,23 +79,37 @@
 		</div>
         </div>
 
-     <div style="position: absolute;top: 90%;left: 39%;width: 22%">
-         <div id="pages" class="text-center" >
+
+         <div id="pages" class="text-center" style="position:absolute;top: 735px;left: 40%;">
         <nav>
-            <ul class="pagination">
+            <ul class="pagination" >
                 <li class="step-links">
                 {% if page.has_previous %}
                     {% if query %}
-                    <a class='active' href="?q={{ query }}&amp;page={{ page.previous_page_number }}" style="width: 100px;">Previous</a>
+                        <a class='active' href="?q={{ query }}&amp;page={{ page.previous_page_number }}" >Previous</a>
                     {% else %}
-                    <a class='active' href="?page={{ page.previous_page_number }}" style="width: 100px;">Previous</a>
+                        <a class='active' href="?page={{ page.previous_page_number }}" >Previous</a>
                     {% endif %}
                 {% endif %}
 
                 <span class="current">
                      {{ page.number }} / {{ page.paginator.num_pages }}</span>
 
-                   {# 超过十页就显示。。。这个还没有完成 别忘了#}
+                {% if page.has_next %}
+                    {% if query %}
+                        <a class='active' href="?q={{ query }}&amp;page={{ page.next_page_number }}" style="width: 90px;">Next</a>
+                    {% else %}
+                        <a class='active' href="?page={{ page.next_page_number }}" style="width: 90px;">Next</a>
+                    {% endif %}
+                {% endif %}
+                </li></ul></nav>
+         </div>
+
+        </div>
+
+
+
+                           {# 超过十页就显示。。。这个还没有完成 别忘了#}
 {#                {% for one_page in page.paginator.page_range %}#}
 {#                    {% if query %}#}
 {#                        {% if one_page %}#}
@@ -126,16 +142,7 @@
 {#                    {% endif %}#}
 {#                    {% endfor %}#}
 
-                {% if page.has_next %}
-                    {% if query %}
-                    <a class='active' href="?q={{ query }}&amp;page={{ page.next_page_number }}" style="width: 100px;">Next</a>
-                        {% else %}
-                        <a class='active' href="?page={{ page.next_page_number }}" style="width: 100px;">Next</a>
-                        {% endif %}
-                {% endif %}
-                </li></ul></nav></div>
-     </div>
-        </div>
+
 
     <script>
         value = document.getElementById("input").getAttribute("value");
@@ -146,6 +153,21 @@
           }
 
       function process_text(id) {
+          let patter = document.getElementById("input").value;
+          let patters = patter.split(' ');
+          let new_patters = new Array();
+          for (let i=0; i<patters.length;i++){
+              if (patters[i] !== "AND"){
+                    {#patters[i] = patters[i] + "s?";#}
+                    new_patters.push(patters[i].trim());
+              }
+          }
+          let res = new Array();
+          for(let i=0;i<new_patters.length;i++){
+              let re = new RegExp(new_patters[i],"i");
+              res.push(re);
+          }
+
           let title = document.getElementById(id).innerText;
           let text_string = document.getElementById("text-" + id).innerText;
           let data = text_string.split("Ingredients:");
@@ -156,13 +178,20 @@
 
           Ingredients = Ingredients.split('\n');
           let order = "";
-          for(i in Ingredients){
+          for(let i in Ingredients){
+              for(let t=0;t<=res.length;t++){
+                  Ingredients[i] = Ingredients[i].replace(res[t],"<span class='highLight'>$&</span>");
+              }
               temp_1 = "<li>"+Ingredients[i]+"</li>";
               order = order + temp_1;
           }
+
           let ins = "";
           Instructions = Instructions.split('\n');
-          for(i in Instructions){
+          for(let i in Instructions){
+              for(let t=0;t<=res.length;t++){
+                  Instructions[i] = Instructions[i].replace(res[t],"<span class='highLight'>$&</span>");
+              }
               temp_2 = "<li>"+Instructions[i]+"</li>";
               ins = ins + temp_2;
           }
@@ -173,15 +202,34 @@
 
         let times = document.getElementsByTagName("button")[0].id;
 
-		let pattern = document.getElementById("input").value;
-
-		let re = new RegExp(pattern,"g");
+		let patter = document.getElementById("input").value;
+          let patters = patter.split(' ');
+          let new_patters = new Array();
+          for (let i=0; i<patters.length;i++){
+              if (patters[i] !== "AND"){
+                    new_patters.push(patters[i].trim());
+              }
+          }
+          let res = new Array();
+          for(let i=0;i<new_patters.length;i++){
+              let re = new RegExp(new_patters[i],"i");
+              res.push(re);
+          }
 
         for(let i=0;i<times;i++){
             let searching = document.getElementById(i).innerHTML;
+            for (let t = 0;t<=res.length;t++){
+                searching = searching.replace(res[t],"<span class='highLight'>$&</span>");
+            }
+            document.getElementById(i).innerHTML = searching;
+	        }
 
-            let search_result = searching.replace(re,"<span class='highLight'>$&</span>");
-            document.getElementById(i).innerHTML = search_result;
+        for(let i=0;i<times;i++){
+            let searching = document.getElementById("abstract-"+i).innerHTML;
+            for (let t=0;t<=res.length;t++){
+                searching = searching.replace(res[t],"<span class='highLight'>$&</span>");
+            }
+            document.getElementById("abstract-"+i).innerHTML = searching;
 	        }
 
     </script>
