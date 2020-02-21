@@ -12,7 +12,8 @@
 {% load static %}
             <img src="{% static "/smartrecipe.png" %}" style="width: 30%;height: 15%;position: absolute;top: 19%;right:35%; ">
             <form method="get" action="">
-                <input type="search" placeholder="please enter recipe here" style="border-radius: 25px;border: 2px solid black;width: 50%;position: absolute;left: 25%;top: 35%;height: 8%;outline:none;font-size: 20px;text-indent: 12px;" name="q">
+                <input type="search" placeholder="please enter recipe here" style="border-radius: 25px;border: 2px solid black;width: 50%;position: absolute;left: 25%;top: 35%;height: 8%;outline:none;font-size: 20px;text-indent: 12px;"
+                       name="q" spellcheck="true">
             </form>
 
 	<div id="myCarousel" class="carousel slide" style="width: 35%; position:absolute;top:46%;left: 32.5%;">
@@ -24,13 +25,13 @@
 	</ol>
 	<div class="carousel-inner" >
 		<div class="item active" style="text-align: center;">
-            <a href="http://www.baidu.com"> <img src="{% static "/chicken.jpg" %}" style="display: inline-block;" /></a>
+            <a href="http://127.0.0.1:8000/search/?q=chicken"> <img src="{% static "/chicken.jpg" %}" style="display: inline-block;" /></a>
 		</div>
 		<div class="item" style="text-align: center;">
-            <img src="{% static "/chicken.jpg" %}" style="display: inline-block;"/>
+            <a href="http://127.0.0.1:8000/search/?q=fish"> <img src="{% static "/fish.jpg" %}" style="display: inline-block;"/></a>
 		</div>
 		<div class="item" style="text-align: center;">
-            <img src="{% static "/chicken.jpg" %}" style="display: inline-block" />
+            <a href="http://127.0.0.1:8000/search/?q=pork"><img src="{% static "/pork.jpg" %}" style="display: inline-block" /></a>
 		</div>
 	</div>
 	<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
@@ -42,6 +43,5 @@
 		<span class="sr-only">Next</span>
 	</a>
 	</div>
-
 </body>
 </html>
