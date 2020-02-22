@@ -32,7 +32,7 @@
 		<div id= "main_framework" style="width: 95%; height: 100%;position: absolute;top: 2%;left: 2.5%">
 			<div id="search_framework" style=" margin: auto;width: 90%; height: 18%;">
                 {% load static %}
-			  <a href="http://127.0.0.1:8000/"> <img src="{% static "/smartrecipe.png" %}" style="width: 18%;height: 13%;position: absolute;left: 5%;" /></a>
+			  <a href="/"> <img src="{% static "/smartrecipe.png" %}" style="width: 18%;height: 13%;position: absolute;left: 5%;" /></a>
                 <form method='get' action="" >
 			    <input type="text" class="form-control" style="background-repeat: no-repeat;background-image: url({% static "fangdajing.png" %}); background-position: left;background-size: 4%;position: absolute; top: 4.4%;width: 50%;left: 23%;text-indent: 20px;
                         " name="q" id="input" value="{{ query }}" spellcheck="true" >
