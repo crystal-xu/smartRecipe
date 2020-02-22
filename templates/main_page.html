@@ -10,9 +10,9 @@
 </head>
 <body>
 {% load static %}
-            <img src="{% static "/smartrecipe.png" %}" style="width: 30%;height: 15%;position: absolute;top: 19%;right:35%; ">
+            <a href="http://127.0.0.1:8000/search/"> <img src="{% static "/smartrecipe.png" %}" style="width: 30%;height: 15%;position: absolute;top: 19%;right:35%; "></a>
             <form method="get" action="">
-                <input type="search" placeholder="please enter recipe here" style="border-radius: 25px;border: 2px solid black;width: 50%;position: absolute;left: 25%;top: 35%;height: 8%;outline:none;font-size: 20px;text-indent: 12px;"
+                <input type="search" placeholder="Search a recipe" style="border-radius: 25px;border: 2px solid black;width: 50%;position: absolute;left: 25%;top: 35%;height: 8%;outline:none;font-size: 20px;text-indent: 40px;background-repeat: no-repeat;background-image: url({% static "fangdajing.png" %}); background-position: left;background-size: 6%;"
                        name="q" spellcheck="true">
             </form>
 
