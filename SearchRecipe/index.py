@@ -3,22 +3,21 @@
 # @Author  : jinhang
 # @File    : index.py
 # @Description  : Generate index file (need to input number of data and path of index.txt)
-
-
 import os
 import sys
 import django
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cw3site.settings')
+
+django.setup()
+
 from SearchRecipe.models import TestModel
 from SearchRecipe.data_preprocess import *
 from collections import OrderedDict
 import time
 from sys import stdout
-
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(BASE_DIR)
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cw3site.settings')
-django.setup()
 
 stdout.write("Start build index\n")
 t_start = time.time()
