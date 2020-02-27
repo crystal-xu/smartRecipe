@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>units</title>
+  <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="//cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="//cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+{% load static %}
+            <a href="../search/"> <img src="{% static "/smartrecipe.png" %}" style="width: 30%;height: 15%;position: absolute;top: 19%;right:35%; "></a>
+            <form method="get" action="">
+                <input type="search" placeholder="Search a recipe" style="border-radius: 25px;border: 2px solid black;width: 50%;position: absolute;left: 25%;top: 35%;height: 8%;outline:none;font-size: 20px;text-indent: 40px;background-repeat: no-repeat;background-image: url({% static "fangdajing.png" %}); background-position: left;background-size: 6%;"
+                       name="q" spellcheck="true">
+            </form>
+
+	<div id="myCarousel" class="carousel slide" style="width: 35%; position:absolute;top:46%;left: 32.5%;">
+
+	<ol class="carousel-indicators">
+		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+		<li data-target="#myCarousel" data-slide-to="1"></li>
+		<li data-target="#myCarousel" data-slide-to="2"></li>
+	</ol>
+	<div class="carousel-inner" >
+		<div class="item active" style="text-align: center;">
+            <a href="/search/?q=chicken"> <img src="{% static "/chicken.jpg" %}" style="display: inline-block;" /></a>
+		</div>
+		<div class="item" style="text-align: center;">
+            <a href="/search/?q=fish"> <img src="{% static "/fish.jpg" %}" style="display: inline-block;"/></a>
+		</div>
+		<div class="item" style="text-align: center;">
+            <a href="/search/?q=pork"><img src="{% static "/pork.jpg" %}" style="display: inline-block" /></a>
+		</div>
+	</div>
+	<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+		<span class="sr-only">Previous</span>
+	</a>
+	<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+		<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+		<span class="sr-only">Next</span>
+	</a>
+	</div>
+</body>
+</html>

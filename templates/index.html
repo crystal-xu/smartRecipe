@@ -1,40 +1,196 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-</head>
-<body>
-<div>
-    <form method='get' action="" target="_blank">
-        <label>
-            <input type="text" name="q">
-        </label>
-        <input type="submit" value="查询">
-    </form>
-</div>
+<html style="height: 100%;width: 100%;">
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+		<title></title>
+        {% load static %}
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<h3>数据：</h3>
-{% for result in page.object_list %}
-    <li>
-        <a href="{{ result.link }}">{{ result.title }}</a>
-        <span>{{ result.text }}</span>
-    </li>
-{% empty %}
-    <p>啥也没找到</p>
-{% endfor %}
+        <style type="text/css">
+
+            a:link { color: #778899;}
+            a:visited { color: #ce8483;}
+            a:active { color: #337ab7;}
+            a:hover { color: #67b168;}
+            .highLight{
+                color: red;
+            }
+        </style>
+
+	</head>
+	<body style="height: 100%; width: 100%;background-size: 100% 100%;overflow-y: hidden;overflow-x: hidden;">
+		<div id= "main_framework" style="width: 95%; height: 100%;position: absolute;top: 2%;left: 2.5%">
+			<div id="search_framework" style=" margin: auto;width: 90%; height: 18%;">
+                {% load static %}
+			  <a href="http://ec2-3-11-68-136.eu-west-2.compute.amazonaws.com/"> <img src="{% static "/smartrecipe.png" %}" style="width: 18%;height: 13%;position: absolute;left: 5%;" /></a>
+                <form method='get' action="" >
+			    <input type="text" class="form-control" style="background-repeat: no-repeat;background-image: url({% static "fangdajing.png" %}); background-position: left;background-size: 4%;position: absolute; top: 4.4%;width: 50%;left: 23%;text-indent: 20px;
+                        " name="q" id="input" value="{{ query }}" spellcheck="true" >
+				<div style="position: absolute; left: 73%;top: 4.4%;">
+				<button type="submit" class="btn btn-info" id="{{ page.object_list|length }}" >Search</button>
+                    </div>
+                </form>
+			</div>
+        <div id="content_framework" style=" position:absolute;top: 12%;left:7.5%;width: 85%; height: 79%;">
+            <table   style="width: 100%; height: 100%;"  >
+                <tbody>
+                {% for result in page.object_list %}
+                <tr>
+                    <td style="vertical-align:text-top;">
+                        <a href="{{result.link}}" >{{ result.link|truncatechars:27 }}</a><br />
+                        <a data-toggle="modal" data-target="#myModal-{{ forloop.counter0 }}"    id="{{ forloop.counter0 }}" onclick="process_text(id);" style="font-size:20px;color: #1C1BA8;">{{result.title}}</a><br />
+                        <p id="abstract-{{ forloop.counter0 }}">{{ result.text|truncatechars:280 }}</p>
+
+                        <div class="modal fade" id="myModal-{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-{{ forloop.counter0 }}" aria-hidden="true";>
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel-{{ forloop.counter0 }}" >
+                                        <strong>Detailed Information</strong>
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p id="text-{{ forloop.counter0 }}" >{{result.text}}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+                {% empty %}
+                    {% load static %}
+                    <img src="{% static "/empty.png" %}" width="65%" height="50%" style="position: absolute;top: 25%;left: 17.5%;"/>
+                {% endfor %}
+					</tbody>
+				</table>
+		</div>
+        </div>
+
+        {% if page.object_list %}
+
+         <div id="pages" class="text-center" style="position:absolute;top: 90%;left: 40%;">
+        <nav>
+            <ul class="pagination" >
+                <li class="step-links">
+                {% if page.has_previous %}
+                    {% if query %}
+                        <a class='active' href="?q={{ query }}&amp;page={{ page.previous_page_number }}" >Previous</a>
+                    {% else %}
+                        <a class='active' href="?page={{ page.previous_page_number }}" >Previous</a>
+                    {% endif %}
+                {% endif %}
+
+                <span class="current">
+                     {{ page.number }} / {{ page.paginator.num_pages }}</span>
+
+                {% if page.has_next %}
+                    {% if query %}
+                        <a class='active' href="?q={{ query }}&amp;page={{ page.next_page_number }}" style="width: 90px;">Next</a>
+                    {% else %}
+                        <a class='active' href="?page={{ page.next_page_number }}" style="width: 90px;">Next</a>
+                    {% endif %}
+                {% endif %}
+                </li></ul></nav>
+         </div>
+        </div>
+        {% endif %}
+    <script>
+        value = document.getElementById("input").getAttribute("value");
+        if ( value === "None"){
+              input_value = "Search a recipe";
+              document.getElementById("input").setAttribute("placeholder", input_value);
+              document.getElementById("input").removeAttribute("value");
+          }
+
+      function process_text(id) {
+          let patter = document.getElementById("input").value;
+          let patters = patter.split(' ');
+          let new_patters = new Array();
+          for (let i=0; i<patters.length;i++){
+              if (patters[i] !== "AND" && patters[i] !== "OR"){
+                    {#patters[i] = patters[i] + "s?";#}
+                    new_patters.push(patters[i].trim());
+              }
+          }
+          let res = new Array();
+          for(let i=0;i<new_patters.length;i++){
+              let re = new RegExp(new_patters[i],"i");
+              res.push(re);
+          }
+
+          let title = document.getElementById(id).innerText;
+          let text_string = document.getElementById("text-" + id).innerText;
+          let data = text_string.split("Ingredients:");
+          text_string = data[1].trim();
+          data = text_string.split("Instructions:");
+          let Ingredients = data[0].trim();
+          let Instructions = data[1].trim();
+
+          Ingredients = Ingredients.split('\n');
+          let order = "";
+          for(let i in Ingredients){
+              for(let t=0;t<=res.length;t++){
+                  Ingredients[i] = Ingredients[i].replace(res[t],"<span class='highLight'>$&</span>");
+              }
+              temp_1 = "<li>"+Ingredients[i]+"</li>";
+              order = order + temp_1;
+          }
+
+          let ins = "";
+          Instructions = Instructions.split('\n');
+          for(let i in Instructions){
+              for(let t=0;t<=res.length;t++){
+                  Instructions[i] = Instructions[i].replace(res[t],"<span class='highLight'>$&</span>");
+              }
+              temp_2 = "<li>"+Instructions[i]+"</li>";
+              ins = ins + temp_2;
+          }
+          document.getElementById("text-" + id).innerHTML = "<strong>"+"Ingredient:"+"</strong>"+"<ul>"+order+"</ul>"+"<p></p>"+"<strong>"+"Instructions:"+"</strong>"+"<ol>"+ins+"</ol>";
+          document.getElementById("myModalLabel-"+id).innerHTML = title;
+      }
 
 
-{% if page.has_previous or page.has_next %}
-    <div>
-        {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo;
-        上一页{% if page.has_previous %}</a>{% endif %}
-        |
-        {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}下一页 &raquo;
-        {% if page.has_next %}</a>{% endif %}
-    </div>
-{% endif %}
+        let times = document.getElementsByTagName("button")[0].id;
 
+		let patter = document.getElementById("input").value;
+          let patters = patter.split(' ');
+          let new_patters = new Array();
+          for (let i=0; i<patters.length;i++){
+              if ((patters[i] !== "AND") && (patters[i] !== "OR") ){
+                    new_patters.push(patters[i].trim());
+              }
+          }
+          let res = new Array();
+          for(let i=0;i<new_patters.length;i++){
+              let re = new RegExp(new_patters[i],"i");
+              res.push(re);
+          }
+        for(let i=0;i<times;i++){
+            let searching = document.getElementById(i).innerHTML;
+            for (let t = 0;t<res.length;t++){
 
-</body>
+                searching = searching.replace(res[t],"<span class='highLight'>$&</span>");
+            }
+            document.getElementById(i).innerHTML = searching;
+	        }
+
+        for(let i=0;i<times;i++){
+            let searching = document.getElementById("abstract-"+i).innerHTML;
+            for (let t=0;t<res.length;t++){
+                searching = searching.replace(res[t],"<span class='highLight'>$&</span>");
+            }
+            document.getElementById("abstract-"+i).innerHTML = searching;
+	        }
+    </script>
+	</body>
 </html>

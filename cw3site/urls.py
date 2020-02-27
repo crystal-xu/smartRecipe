@@ -21,5 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('add/', views.add),
     path('query/', views.query),
-    path('search/', views.search)
+    # path(r'^search/(?P<querynew>\w+|)/', views.search, name='search'),
+    path('search/', views.search, name='search'),
+    # TODO: welcome page and load index
+    path('', views.load_welcome)
 ]
