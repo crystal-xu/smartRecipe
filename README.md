@@ -49,10 +49,9 @@ A search engine for recipes.
    <li>Add configurations</li>
    <pre>
     <code>location / {</code><br>
-        <code>include uwsgi_params;</code><br>
+        <pre><code>include uwsgi_params;</code></pre><br>
         <code>uwsgi_pass 127.0.0.1:8000;</code><br>
     <code>}</code>
-    </pre>
 <br/>
     <code>location /static {</code><br>
         <code>alias /root/ttdsCW3/static;</code><br>
