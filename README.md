@@ -1,54 +1,61 @@
 # ttdsCW3
 A search engine for recipes.
 
-**Deployment on the AWS2 server**<br/>
-1. Python
-1) Install python3:<br/>
-   yum install python37<br/>
+<h2>Deployment on the AWS2 server</h2>
+<h4>1. Python</h4>
+   <ul>
+   <li>Install python3:</li>
+   <code>yum install python37</code>
+   </ul>
+<h4>2. Python virtual environment</h4>
+   <ul>
+   <li>Install virtualenv:</li>
+   <code>pip3 install virtualenv</code>
+   <li>Add environment variables:</li>
+   <code>PATH=$PATH:/usr/local/bin</code>
+   <li>Create virtual environment:</li>
+   <code>virtualenv -p /usr/bin/python3 djangoenv</code>
+   </ul>
+<h4>3. Git</h4>
+   <ul>
+   <li>Install git:</li>
+   <code>yum install git</code>
+   <li>Download the project:</li>
+   <code>git clone https://github.com/crystal-xu/ttdsCW3.git</code>
+   <li>Switch to dev branch:</li>
+   <code>git checkout dev</code>
+   </ul>
+<h4>4. Install dependent libraries</h4>
+   <ul>
+   <li>Enter the virtual environment:</li>
+   <code>source djangoenv/bin/active</code>
+   <li>Install libraries:</li>
+   <code>pip install -r requirements.txt</code>
+   </ul>
+<h4>5. uwsgi</h4>
+   <ul>
+   <li>Install uwsgi:</li>
+   <code>pip install gcc python3-devel uwsgi</code>
+   <li>Start uwsgi:</li>
+   <code>uwsgi --ini uwsgi.ini</code>
+   </ul>
+<h4>6. nginx</h4>
+   <ul>
+   <li>Install nginx:</li>
+   <code>sudo amazon-linux-extras install nginx1</code>
+   <li>Configure nginx:</li>
+   <code>/etc/nginx/nginx.conf</code>
+   <li>Switch to root user</li>
+   <li>Add configurations</li>
+    <code>location / {
+        include uwsgi_params;
+        uwsgi_pass 127.0.0.1:8000;
+    }</code>
 <br/>
-2. Python virtual environment
-1) Install virtualenv:<br/>
-   pip3 install virtualenv<br/>
-2) Add environment variables:<br/>
-   PATH=$PATH:/usr/local/bin<br/>
-3) Create virtual environment:<br/>
-   virtualenv -p /usr/bin/python3 djangoenv<br/>
-<br/>
-3. Git
-1) Install git:<br/>
-   yum install git<br/>
-2) Download the project:<br/>
-   git clone https://github.com/crystal-xu/ttdsCW3.git\n<br/>
-3) Switch to dev branch:<br/>
-   git checkout dev<br/>
-<br/>
-4. Install dependent libraries<br/>
-1) Enter the virtual environment<br/>
-   source djangoenv/bin/active<br/>
-2) Install libraries:<br/>
-   pip install -r requirements.txt<br/>
-
-5. uwsgi
-1) Install uwsgi:<br/>
-   pip install gcc python3-devel uwsgi<br/>
-2) Start uwsgi:<br/>
-   uwsgi --ini uwsgi.ini<br/>
-
-6. nginx
-1) Install nginx:<br/>
-   sudo amazon-linux-extras install nginx1<br/>
-2) Configure nginx:<br/>
-   /etc/nginx/nginx.conf<br/>
-3) Switch to root user<br/>
-4) Add configurations<br/>
-    location / {<br/>
-        include uwsgi_params;<br/>
-        uwsgi_pass 127.0.0.1:8000;<br/>
-    }<br/>
-<br/>
-    location /static {<br/>
-        alias /root/ttdsCW3/static;<br/>
-    }<br/>
-5) Start nginx<br/>
+    <code>location /static {
+        alias /root/ttdsCW3/static;
+    }</code>
+   <li>Start nginx</li>
+   </ul>
 
 
