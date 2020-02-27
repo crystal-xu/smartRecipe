@@ -1,7 +1,7 @@
 # ttdsCW3
 A search engine for recipes.
 
-**Deployment on the AWS2 server**
+**Deployment on the AWS2 server**<br/>
 1.Install python3:<br/>
 yum install python37<br/>
 <br/>
