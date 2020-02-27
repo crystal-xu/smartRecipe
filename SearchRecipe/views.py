@@ -44,10 +44,10 @@ def search(request):
         # question_list = TestModel.objects.filter(title=q)
         print("start search")
         question_list = do_search(index, q, doc_all_ids_set)
-        print(question_list)
+        #print(question_list)
     else:
         question_list = TestModel.objects.all()
-        print(question_list)
+        #print(question_list)
         question_list = question_list[:100]
 
     paginator = Paginator(question_list, 5)
