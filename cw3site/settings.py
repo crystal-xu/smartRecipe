@@ -83,8 +83,8 @@ DATABASES = {
     }
 }
 from mongoengine import connect
-connect('ttdsDB', host='ec2-3-11-68-136.eu-west-2.compute.amazonaws.com', port=27017)
-#connect('newDB1', host='ec2-35-177-20-229.eu-west-2.compute.amazonaws.com', port=27017)
+#connect('ttdsDB', host='ec2-3-11-68-136.eu-west-2.compute.amazonaws.com', port=27017)
+connect('newDB1', host='ec2-35-177-20-229.eu-west-2.compute.amazonaws.com', port=27017)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

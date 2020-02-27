@@ -2,15 +2,14 @@
 <head>
   <meta charset="UTF-8">
   <title>units</title>
-  <link rel="stylesheet" href="css/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="//cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="//cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="//cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 	<script src="//cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 {% load static %}
-            <a href="../search/"> <img src="{% static "/smartrecipe.png" %}" style="width: 30%;height: 15%;position: absolute;top: 19%;right:35%; "></a>
+            <a href="/search/"> <img src="{% static "/smartrecipe.png" %}" style="width: 30%;height: 15%;position: absolute;top: 19%;right:35%; "></a>
             <form method="get" action="">
                 <input type="search" placeholder="Search a recipe" style="border-radius: 25px;border: 2px solid black;width: 50%;position: absolute;left: 25%;top: 35%;height: 8%;outline:none;font-size: 20px;text-indent: 40px;background-repeat: no-repeat;background-image: url({% static "fangdajing.png" %}); background-position: left;background-size: 6%;"
                        name="q" spellcheck="true">
