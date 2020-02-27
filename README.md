@@ -47,9 +47,9 @@ A search engine for recipes.
    <code>/etc/nginx/nginx.conf</code>
    <li>Switch to root user</li>
    <li>Add configurations</li>
-    <code>location / {<br>
-        include uwsgi_params;<br>
-        uwsgi_pass 127.0.0.1:8000;<br>
+    <code>location / {</code><br>
+        <code>include uwsgi_params;</code><br>
+        <code>uwsgi_pass 127.0.0.1:8000;</code><br>
     }</code>
 <br/>
     <code>location /static {\
