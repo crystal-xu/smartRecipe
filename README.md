@@ -47,13 +47,13 @@ A search engine for recipes.
    <code>/etc/nginx/nginx.conf</code>
    <li>Switch to root user</li>
    <li>Add configurations</li>
-    <code>location / {
-        include uwsgi_params;
-        uwsgi_pass 127.0.0.1:8000;
+    <code>location / {<br>
+        include uwsgi_params;<br>
+        uwsgi_pass 127.0.0.1:8000;<br>
     }</code>
 <br/>
-    <code>location /static {
-        alias /root/ttdsCW3/static;
+    <code>location /static {<br>
+        alias /root/ttdsCW3/static;<br>
     }</code>
    <li>Start nginx</li>
    </ul>
