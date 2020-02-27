@@ -52,8 +52,8 @@ A search engine for recipes.
         uwsgi_pass 127.0.0.1:8000;<br>
     }</code>
 <br/>
-    <code>location /static {<br>
-        alias /root/ttdsCW3/static;<br>
+    <code>location /static {\
+        alias /root/ttdsCW3/static;\
     }</code>
    <li>Start nginx</li>
    </ul>
