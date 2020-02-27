@@ -50,11 +50,11 @@ A search engine for recipes.
     <code>location / {</code><br>
         <code>include uwsgi_params;</code><br>
         <code>uwsgi_pass 127.0.0.1:8000;</code><br>
-    }</code>
+    <code>}</code>
 <br/>
-    <code>location /static {\
-        alias /root/ttdsCW3/static;\
-    }</code>
+    <code>location /static {</code><br>
+        <code>alias /root/ttdsCW3/static;</code><br>
+    <code>}</code>
    <li>Start nginx</li>
    </ul>
 
