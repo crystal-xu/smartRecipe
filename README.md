@@ -1,7 +1,7 @@
 # ttdsCW3
 A search engine for recipes.
 
-Deployment on the AWS2 server:
+##################Deployment on the AWS2 server#############
 1.Install python3:
 yum install python37
 
@@ -37,7 +37,7 @@ Configure nginx:
 Switch to root user
 Add configurations
     location / {
-        include uwsgi_params;
+        include uwsgi_params;
         uwsgi_pass 127.0.0.1:8000;
     }
 
