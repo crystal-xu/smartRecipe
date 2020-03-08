@@ -29,7 +29,8 @@
 			  <a href="/"> <img src="{% static "/smartrecipe.png" %}" style="width: 18%;height: 13%;position: absolute;left: 5%;" /></a>
                 <form method='get' action="" >
 			    <input type="text" class="form-control" style="background-repeat: no-repeat;background-image: url({% static "fangdajing.png" %}); background-position: left;background-size: 4%;position: absolute; top: 4.4%;width: 50%;left: 23%;text-indent: 20px;
-                        " name="q" id="input" value="{{ query }}" spellcheck="true" >
+                        " name="q" id="input" value="{{ query_ori }}"  >
+
 				<div style="position: absolute; left: 73%;top: 4.4%;">
 				<button type="submit" class="btn btn-info" id="{{ page.object_list|length }}" >Search</button>
                     </div>
@@ -88,6 +89,7 @@
                     {% else %}
                         <a class='active' href="?page={{ page.previous_page_number }}" >Previous</a>
                     {% endif %}
+
                 {% endif %}
 
                 <span class="current">
@@ -99,12 +101,15 @@
                     {% else %}
                         <a class='active' href="?page={{ page.next_page_number }}" style="width: 90px;">Next</a>
                     {% endif %}
+
                 {% endif %}
                 </li></ul></nav>
          </div>
         </div>
         {% endif %}
     <script>
+
+
         value = document.getElementById("input").getAttribute("value");
         if ( value === "None"){
               input_value = "Search a recipe";
@@ -118,8 +123,20 @@
           let new_patters = new Array();
           for (let i=0; i<patters.length;i++){
               if (patters[i] !== "AND" && patters[i] !== "OR"){
-                    {#patters[i] = patters[i] + "s?";#}
-                    new_patters.push(patters[i].trim());
+                  {#改动1#}
+                if (patters[i] === "NOT") {
+                        break;
+                    }
+                if (patters[i].indexOf("#") === -1) {
+
+                    temp = patters[i].replace('\"', "");
+                    new_patters.push(temp.trim());
+                }else{
+                    index_left_bracket = patters[i].indexOf("(");
+                    index_comma = patters[i].indexOf(",");
+                    new_patters.push(patters[i].slice(index_left_bracket+1,index_comma));
+                    new_patters.push(patters[i].slice(index_comma+1,patters[i].length - 1));
+                }
               }
           }
           let res = new Array();
@@ -127,7 +144,7 @@
               let re = new RegExp(new_patters[i],"i");
               res.push(re);
           }
-
+          console.log(res);
           let title = document.getElementById(id).innerText;
           let text_string = document.getElementById("text-" + id).innerText;
           let data = text_string.split("Ingredients:");
@@ -166,15 +183,30 @@
           let patters = patter.split(' ');
           let new_patters = new Array();
           for (let i=0; i<patters.length;i++){
-              if ((patters[i] !== "AND") && (patters[i] !== "OR") ){
-                    new_patters.push(patters[i].trim());
+              if (patters[i] !== "AND" && patters[i] !== "OR"){
+                  {#改动2#}
+                if (patters[i] === "NOT") {
+                        break;
+                    }
+                if (patters[i].indexOf("#") === -1) {
+
+                    temp = patters[i].replace('\"', "");
+                    new_patters.push(temp.trim());
+                }else{
+                    index_left_bracket = patters[i].indexOf("(");
+                    index_comma = patters[i].indexOf(",");
+                    new_patters.push(patters[i].slice(index_left_bracket+1,index_comma));
+                    new_patters.push(patters[i].slice(index_comma+1,patters[i].length - 1));
+                }
               }
           }
+
           let res = new Array();
           for(let i=0;i<new_patters.length;i++){
               let re = new RegExp(new_patters[i],"i");
               res.push(re);
           }
+          console.log(res);
         for(let i=0;i<times;i++){
             let searching = document.getElementById(i).innerHTML;
             for (let t = 0;t<res.length;t++){

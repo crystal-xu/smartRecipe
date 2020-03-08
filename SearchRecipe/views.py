@@ -8,6 +8,8 @@ from SearchRecipe.search import do_search
 import os
 from SearchRecipe.search import load_index
 from django.conf import settings
+from urllib.parse import quote
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cw3site.settings')
 index_path = os.path.join(settings.STATICFILES_DIRS[0], "index.txt")
 
@@ -35,29 +37,36 @@ def query(request):
 
 def search(request):
     global querynew
+    global paginator
     if querynew != '':
         q = querynew
     else:
         q = request.GET.get('q')
+    print("query is :{} ".format(q))
     querynew = ''
-    if q:
-        # question_list = TestModel.objects.filter(title=q)
-        print("start search")
-        question_list = do_search(index, q, doc_all_ids_set)
-        #print(question_list)
-    else:
-        question_list = TestModel.objects.all()
-        #print(question_list)
-        question_list = question_list[:100]
+    page = request.GET.get('page')
+    if page is None:
+        page = 1
+        if q:
+            print("get query: {}".format(q))
+            print("start search")
+            question_list = do_search(index, q, doc_all_ids_set)
+            #print(question_list)
+        else:
+            question_list = TestModel.objects.all()
+            #print(question_list)
+            question_list = question_list[:100]
+        paginator = Paginator(question_list, 5)
 
-    paginator = Paginator(question_list, 5)
+    print("page: {}".format(page))
+    q_url = quote(q, 'utf-8')
     context = {
-        'page': paginator.page(request.GET.get('page', 1)),
+        'page': paginator.page(request.GET.get('page', page)),
         'paginator': paginator,
-        'query': q
+        'query': q_url,
+        'query_ori': q
     }
     return render(request, 'index.html', context)
-
 
 def load_welcome(request):
 
