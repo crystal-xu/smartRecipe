@@ -59,7 +59,10 @@ def search(request):
         paginator = Paginator(question_list, 5)
 
     print("page: {}".format(page))
-    q_url = quote(q, 'utf-8')
+    if q is not None:
+        q_url = quote(q, 'utf-8')
+    else:
+        q_url = q
     context = {
         'page': paginator.page(request.GET.get('page', page)),
         'paginator': paginator,
@@ -67,6 +70,7 @@ def search(request):
         'query_ori': q
     }
     return render(request, 'index.html', context)
+
 
 def load_welcome(request):
 
